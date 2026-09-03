@@ -7,6 +7,7 @@ import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
 import { authRoutes } from "./app/module/auth/auth.route";
 import { boardRoutes } from "./app/module/board/board.route";
+import { columnRoutes } from "./app/module/column/column.route";
 
 const app: Application = express();
 
@@ -34,6 +35,7 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/board", boardRoutes);
+app.use("/api/column", columnRoutes);
 
 app.use(globalErrorHandler);
 app.use(notFound);
