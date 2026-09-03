@@ -60,10 +60,45 @@ const deleteBoard = catchAsync(async (req: Request, res: Response) => {
     data: null,
   });
 });
+
+const shareBoard = catchAsync(async (req: Request, res: Response) => {
+  const { boardId } = req.params;
+  const { email } = req.body;
+  const userId = req.user!.userId;
+  const result = await boardService.shareBoard(
+    boardId as string,
+    email as string,
+    userId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Board shared successfully.",
+    data: result,
+  });
+});
+const removeBoardMember = catchAsync(async (req: Request, res: Response) => {
+  const { boardId, memberId } = req.params;
+  const userId = req.user!.userId;
+  const result = await boardService.removeBoardMember(
+    boardId as string,
+    memberId as string,
+    userId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Member removed successfully.",
+    data: result,
+  });
+});
 export const boardController = {
   createBoard,
   getMyBoards,
   getBoardById,
   updateBoard,
   deleteBoard,
+
+  shareBoard,
+  removeBoardMember,
 };

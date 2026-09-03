@@ -23,10 +23,18 @@ router.patch(
   boardController.updateBoard,
 );
 
-router.delete(
-  "/:boardId",
+router.delete("/:boardId", auth(), boardController.deleteBoard);
+
+router.post(
+  "/:boardId/share",
   auth(),
-  boardController.deleteBoard
+  validateRequest(BoardValidation.shareBoard),
+  boardController.shareBoard,
 );
 
+router.delete(
+  "/:boardId/members/:memberId",
+  auth(),
+  boardController.removeBoardMember,
+);
 export const boardRoutes = router;

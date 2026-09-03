@@ -9,7 +9,12 @@ const updateBoard = z.object({
   title: z.string().min(1).max(120).optional(),
   description: z.string().max(500).optional(),
 });
+const shareBoard = z.object({
+  email: z.email("Email is required"),
+});
+
 export const BoardValidation = {
   createBoard,
   updateBoard,
+  shareBoard,
 };

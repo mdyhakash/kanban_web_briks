@@ -151,10 +151,104 @@ const deleteBoard = async (boardId: string, userId: string) => {
   return null;
 };
 
+const shareBoard = async (boardId: string, email: string, userId: string) => {
+  const board = await prisma.board.findUnique({
+    where: {
+      id: boardId,
+    },
+  });
+
+  if (!board) {
+    throw new Error("Board not found");
+  }
+  if (board.ownerId !== userId) {
+    throw new Error("You are not authorized to share this board");
+  }
+
+  const userToAdd = await prisma.user.findUnique({ where: { email: email } });
+
+  if (!userToAdd) {
+    throw new Error("No user found with that email.");
+  }
+
+  const existing = await prisma.boardMember.findUnique({
+    where: {
+      boardId_userId: { boardId, userId: userToAdd.id },
+    },
+  });
+
+  if (existing) {
+    throw new Error("This user already has access to the board.");
+  }
+
+  const member = await prisma.boardMember.create({
+    data: {
+      boardId,
+      userId: userToAdd.id,
+      role: "MEMBER",
+    },
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+    },
+  });
+
+  return member;
+};
+
+const removeBoardMember = async (
+  boardId: string,
+  memberUserId: string,
+  userId: string,
+) => {
+  const board = await prisma.board.findUnique({
+    where: {
+      id: boardId,
+    },
+  });
+
+  if (!board) {
+    throw new Error("Board not found");
+  }
+
+  if (board.ownerId !== userId) {
+    throw new Error("You are not authorized to remove members");
+  }
+
+  if (memberUserId === board.ownerId) {
+    throw new Error("Cannot remove the board owner.");
+  }
+
+  const membership = await prisma.boardMember.findUnique({
+    where: {
+      boardId_userId: {
+        boardId,
+        userId: memberUserId,
+      },
+    },
+  });
+
+  if (!membership) {
+    throw new Error("This user is not a member of the board.");
+  }
+
+  await prisma.boardMember.delete({
+    where: {
+      boardId_userId: {
+        boardId,
+        userId: memberUserId,
+      },
+    },
+  });
+
+  return null;
+};
+
 export const boardService = {
   createBoard,
   getMyBoards,
   getBoradById,
   updateBoard,
   deleteBoard,
+  shareBoard,
+  removeBoardMember,
 };
