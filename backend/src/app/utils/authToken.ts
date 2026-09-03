@@ -8,7 +8,7 @@ export const createUserTokens = (user: {
   email: string;
 }) => {
   const jwtPayload = {
-    id: user.id,
+    userId: user.id,
     name: user.name,
     email: user.email,
   };
