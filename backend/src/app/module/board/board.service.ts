@@ -100,11 +100,7 @@ const getBoradById = async (boardId: string) => {
   return board;
 };
 
-const updateBoard = async (
-  boardId: string,
-  userId: string,
-  payload: IUpdateBoard,
-) => {
+const updateBoard = async (boardId: string, payload: IUpdateBoard) => {
   const board = await prisma.board.findUnique({
     where: {
       id: boardId,
@@ -114,11 +110,6 @@ const updateBoard = async (
   if (!board) {
     throw new Error("Board not found");
   }
-
-  if (board.ownerId !== userId) {
-    throw new Error("You are not authorized to update this board");
-  }
-
   return prisma.board.update({
     where: {
       id: boardId,
@@ -127,7 +118,7 @@ const updateBoard = async (
   });
 };
 
-const deleteBoard = async (boardId: string, userId: string) => {
+const deleteBoard = async (boardId: string) => {
   const board = await prisma.board.findUnique({
     where: {
       id: boardId,
@@ -137,11 +128,6 @@ const deleteBoard = async (boardId: string, userId: string) => {
   if (!board) {
     throw new Error("Board not found");
   }
-
-  if (board.ownerId !== userId) {
-    throw new Error("You are not authorized to delete this board");
-  }
-
   await prisma.board.delete({
     where: {
       id: boardId,
@@ -151,7 +137,7 @@ const deleteBoard = async (boardId: string, userId: string) => {
   return null;
 };
 
-const shareBoard = async (boardId: string, email: string, userId: string) => {
+const shareBoard = async (boardId: string, email: string) => {
   const board = await prisma.board.findUnique({
     where: {
       id: boardId,
@@ -160,9 +146,6 @@ const shareBoard = async (boardId: string, email: string, userId: string) => {
 
   if (!board) {
     throw new Error("Board not found");
-  }
-  if (board.ownerId !== userId) {
-    throw new Error("You are not authorized to share this board");
   }
 
   const userToAdd = await prisma.user.findUnique({ where: { email: email } });
@@ -195,11 +178,7 @@ const shareBoard = async (boardId: string, email: string, userId: string) => {
   return member;
 };
 
-const removeBoardMember = async (
-  boardId: string,
-  memberUserId: string,
-  userId: string,
-) => {
+const removeBoardMember = async (boardId: string, memberUserId: string) => {
   const board = await prisma.board.findUnique({
     where: {
       id: boardId,
@@ -208,10 +187,6 @@ const removeBoardMember = async (
 
   if (!board) {
     throw new Error("Board not found");
-  }
-
-  if (board.ownerId !== userId) {
-    throw new Error("You are not authorized to remove members");
   }
 
   if (memberUserId === board.ownerId) {

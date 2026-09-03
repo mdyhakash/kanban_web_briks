@@ -34,25 +34,19 @@ const getBoardById = catchAsync(async (req: Request, res: Response) => {
 });
 const updateBoard = catchAsync(async (req: Request, res: Response) => {
   const { boardId } = req.params;
-  const userId = req.user!.userId;
   const payload = req.body;
-  const result = await boardService.updateBoard(
-    boardId as string,
-    userId as string,
-    payload,
-  );
+  const result = await boardService.updateBoard(boardId as string, payload);
 
   sendResponse(res, {
     statusCode: 200,
-    message: "Board retrieved successfully.",
+    message: "Board updated successfully.",
     data: result,
   });
 });
 
 const deleteBoard = catchAsync(async (req: Request, res: Response) => {
   const { boardId } = req.params;
-  const userId = req.user!.userId;
-  await boardService.deleteBoard(boardId as string, userId as string);
+  await boardService.deleteBoard(boardId as string);
 
   sendResponse(res, {
     statusCode: 200,
@@ -68,7 +62,6 @@ const shareBoard = catchAsync(async (req: Request, res: Response) => {
   const result = await boardService.shareBoard(
     boardId as string,
     email as string,
-    userId as string,
   );
 
   sendResponse(res, {
@@ -83,7 +76,6 @@ const removeBoardMember = catchAsync(async (req: Request, res: Response) => {
   const result = await boardService.removeBoardMember(
     boardId as string,
     memberId as string,
-    userId as string,
   );
 
   sendResponse(res, {
