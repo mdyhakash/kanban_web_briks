@@ -3,7 +3,7 @@ import { auth } from "../../middleware/checkAuth";
 import { boardController } from "./board.controller";
 import { BoardValidation } from "./board.validation";
 import { validateRequest } from "../../middleware/validateRequest";
-import isBoardOwner from "../../middleware/isBoardOwner";
+import checkBoardAccess from "../../middleware/checkBoardAccess";
 
 const router = Router();
 
@@ -16,21 +16,32 @@ router.post(
 
 router.get("/", auth(), boardController.getMyBoards);
 
-router.get("/:boardId", auth(), boardController.getBoardById);
+router.get(
+  "/:boardId",
+  auth(),
+  checkBoardAccess(),
+  boardController.getBoardById,
+);
+
 router.patch(
   "/:boardId",
   auth(),
-  isBoardOwner,
+  checkBoardAccess({ requireOwner: true }),
   validateRequest(BoardValidation.updateBoard),
   boardController.updateBoard,
 );
 
-router.delete("/:boardId", auth(), isBoardOwner, boardController.deleteBoard);
+router.delete(
+  "/:boardId",
+  auth(),
+  checkBoardAccess({ requireOwner: true }),
+  boardController.deleteBoard,
+);
 
 router.post(
   "/:boardId/share",
   auth(),
-  isBoardOwner,
+  checkBoardAccess({ requireOwner: true }),
   validateRequest(BoardValidation.shareBoard),
   boardController.shareBoard,
 );
@@ -38,7 +49,7 @@ router.post(
 router.delete(
   "/:boardId/members/:memberId",
   auth(),
-  isBoardOwner,
+  checkBoardAccess({ requireOwner: true }),
   boardController.removeBoardMember,
 );
 export const boardRoutes = router;
