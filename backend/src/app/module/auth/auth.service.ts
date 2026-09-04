@@ -83,8 +83,17 @@ const refreshToken = async (token: string) => {
   return { accessToken };
 };
 
+const getMe = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    omit: { password: true },
+  });
+  if (!user) throw new Error("User not found.");
+  return user;
+};
 export const authServices = {
   registerUser,
   loginUser,
   refreshToken,
+  getMe,
 };

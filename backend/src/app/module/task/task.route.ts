@@ -41,4 +41,14 @@ router.delete(
   taskController.deleteTask,
 );
 
+router.patch(
+  "/:taskId/move",
+  auth(),
+  checkBoardAccess({
+    resolveBoardId: async (req) =>
+      taskService.getTaskBoardId(req.params.taskId as string),
+  }),
+  validateRequest(taskValidation.moveTask),
+  taskController.moveTask,
+);
 export const taskRoutes = router;

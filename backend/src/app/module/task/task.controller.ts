@@ -36,10 +36,23 @@ const deleteTask = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const moveTask = catchAsync(async (req: Request, res: Response) => {
+  const result = await taskService.moveTask(
+    req.params.taskId as string,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Task moved successfully.",
+    data: result,
+  });
+});
 const taskController = {
   createTask,
   updateTask,
   deleteTask,
+  moveTask,
 };
 
 export default taskController;
