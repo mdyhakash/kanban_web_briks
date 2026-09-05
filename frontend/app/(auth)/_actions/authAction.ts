@@ -19,7 +19,7 @@ export const loginAction = async (prevState: AuthState, formData: FormData) => {
     password,
   };
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
+  const res = await fetch(`${process.env.BACKEND_API_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -55,15 +55,14 @@ export const registerAction = async (
   const name = formData.get("name");
   const email = formData.get("email");
   const password = formData.get("password");
-  
+
   const payload = {
     name,
     email,
     password,
-   
   };
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}/api/auth/register`, {
+  const res = await fetch(`${process.env.BACKEND_API_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -77,8 +76,8 @@ export const registerAction = async (
     return result;
   }
 
-  //login
-  const login = await fetch(`${process.env.BACKEND_API_URL}/api/auth/login`, {
+  //auto login
+  const login = await fetch(`${process.env.BACKEND_API_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
