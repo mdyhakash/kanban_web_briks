@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   DndContext,
@@ -21,6 +21,7 @@ import { TaskCard } from "./task-card";
 
 export function Board({ board }: { board: BoardType }) {
   const router = useRouter();
+  const dndId = useId();
   const [columns, setColumns] = useState<ColumnType[]>(
     [...(board.columns ?? [])].sort((a, b) => a.position - b.position),
   );
@@ -97,6 +98,7 @@ export function Board({ board }: { board: BoardType }) {
 
   return (
     <DndContext
+      id={dndId}
       sensors={sensors}
       collisionDetection={closestCorners}
       onDragStart={handleDragStart}

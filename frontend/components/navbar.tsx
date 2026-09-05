@@ -80,16 +80,13 @@ export function Navbar({ board, userId }: NavbarProps) {
     <>
       <header className="flex items-center justify-between border-b bg-card px-6 py-3">
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            render={
-              <Link href="/" aria-label="Back to your boards">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            }
-          />
+          <Link
+            href="/"
+            aria-label="Back to your boards"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
 
           <LayoutDashboard className="h-5 w-5 text-primary" />
 
@@ -126,9 +123,13 @@ export function Navbar({ board, userId }: NavbarProps) {
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button variant="ghost" size="icon">
+                <button
+                  type="button"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground"
+                  aria-label="Board options"
+                >
                   <MoreHorizontal className="h-4 w-4" />
-                </Button>
+                </button>
               }
             />
 
@@ -137,18 +138,17 @@ export function Navbar({ board, userId }: NavbarProps) {
                 disabled={!isOwner}
                 onClick={() => {
                   if (!isOwner) return;
-
                   setRenameOpen(true);
                 }}
               >
                 Rename board
               </DropdownMenuItem>
+
               <DropdownMenuItem
                 variant="destructive"
                 disabled={!isOwner}
                 onClick={() => {
                   if (!isOwner) return;
-
                   setDeleteOpen(true);
                 }}
               >
