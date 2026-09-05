@@ -241,6 +241,11 @@ npm run dev
 cd frontend
 npm run dev
 ```
+### Demo Login
+
+- **Email:** `akash@gmail.com`
+- **Password:** `12345678@aA`
+
 
 Visit **http://localhost:3000**, register a user, and start creating boards.
 
