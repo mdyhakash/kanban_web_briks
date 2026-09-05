@@ -62,14 +62,16 @@ const refreshToken = async (token: string) => {
     throw new Error(verfiedToken.error);
   }
 
-  const { id } = verfiedToken.data as JwtPayload;
+  const { userId } = verfiedToken.data as JwtPayload & {
+    userId: string;
+  };
 
   const user = await prisma.user.findFirstOrThrow({
-    where: { id },
+    where: { id: userId },
   });
 
   const jwtpayload = {
-    id: user.id,
+    userId: user.id,
     name: user.name,
     email: user.email,
   };
