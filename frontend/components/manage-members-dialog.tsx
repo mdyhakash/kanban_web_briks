@@ -23,10 +23,12 @@ export function ManageMembersDialog({
   board,
   open,
   onOpenChange,
+  isOwner,
 }: {
   board: Board;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isOwner: boolean;
 }) {
   const router = useRouter();
   const action = shareBoardAction.bind(null, board.id);
@@ -99,13 +101,13 @@ export function ManageMembersDialog({
                   </p>
                 </div>
               </div>
-              {m.role !== "OWNER" && (
+              {isOwner && m.role !== "OWNER" && (
                 <Button
                   variant="ghost"
                   size="icon"
                   className="h-7 w-7"
                   disabled={isRemoving && removingId === m.id}
-                  onClick={() => handleRemove(m.id)}
+                  onClick={() => handleRemove(m.user.id)}
                 >
                   <X className="h-4 w-4" />
                 </Button>

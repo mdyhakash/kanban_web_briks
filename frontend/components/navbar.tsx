@@ -172,6 +172,7 @@ export function Navbar({ board, userId }: NavbarProps) {
         board={board}
         open={membersOpen}
         onOpenChange={setMembersOpen}
+        isOwner={isOwner}
       />
 
       <RenameBoardDialog
